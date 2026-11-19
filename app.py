@@ -72,10 +72,17 @@ st.title("Qualité du référentiel TVA")
 # ÉTAPE 1 — Les quatre chiffres clés
 # =============================================================================
 total = len(selection)
+valides = (selection["statut"] == "valide").sum()
+invalides = (selection["statut"] == "invalide").sum()
+non_tranches = (selection["statut"] == "non_tranche").sum()
+
 col1, col2, col3, col4 = st.columns(4)
 col1.metric("Numéros", total)
 # TODO CHIFFRES (étape 1) : dans col2, col3 et col4, le nombre de valides, d'invalides et de non tranchés,
 #          chacun avec son pourcentage du total.
+col2.metric("Valides", valides, f"{valides / total:.1%} du total", delta_color="off")
+col3.metric("Invalides", invalides, f"{invalides / total:.1%} du total", delta_color="off")
+col4.metric("Non tranchés", non_tranches, f"{non_tranches / total:.1%} du total", delta_color="off")
 
 # =============================================================================
 # ÉTAPE 2 — L'entonnoir
