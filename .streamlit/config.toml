@@ -1,0 +1,3 @@
+[server]
+# Recharge la page à chaque enregistrement de app.py
+runOnSave = true
