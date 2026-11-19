@@ -50,8 +50,16 @@ st.sidebar.header("Filtres")
 pays = st.sidebar.multiselect("Pays déclaré", sorted(df["pays_declare"].unique()))
 
 # TODO FILTRE_CANAL (étape 3a) : sur le même modèle, un filtre « Canal de saisie » sur la colonne source_saisie.
+canal = st.sidebar.multiselect("Canal de saisie", sorted(df["source_saisie"].unique()))
 
 # TODO FILTRE_PERIODE (étape 3b) : un filtre « Période de saisie » avec st.sidebar.slider (voir le brief).
+debut, fin = st.sidebar.slider(
+"Période de saisie",
+min_value=df["date_saisie"].min().date(),
+max_value=df["date_saisie"].max().date(),
+value=(df["date_saisie"].min().date(), df["date_saisie"].max().date()),
+format="DD/MM/YYYY",
+)
 
 # `selection` contient les lignes qui passent les filtres. Toute la suite utilise
 # `selection`, jamais `df` : c'est ce qui fait réagir la page aux filtres.
@@ -60,6 +68,9 @@ if pays:
     selection = selection[selection["pays_declare"].isin(pays)]
 # TODO APPLIQUER_FILTRES (étape 3c) : appliquer le filtre canal et le filtre période à `selection`.
 #           Toujours `selection = selection[...]`, jamais `selection = df[...]`.
+if canal:
+    selection = selection[selection["source_saisie"].isin(canal)]
+selection = selection[selection["date_saisie"].dt.date.between(debut, fin)]
 
 # =============================================================================
 # ÉTAPE 6 — Rendre la page lisible par tous (à faire APRÈS l'étape 5)
