@@ -122,6 +122,23 @@ st.subheader("D'où viennent les erreurs ?")
 # TODO GRAPHIQUES (étape 4) : avec taux_invalides(selection, "source_saisie"), puis "pays_declare",
 #          deux graphiques en barres horizontales avec la valeur écrite sur chaque barre,
 #          puis une phrase (st.caption) qui explique quel canal sort du lot.
+taux_canal = taux_invalides(selection, "source_saisie")
+taux_pays = taux_invalides(selection, "pays_declare")
+#st.dataframe(taux)
+fig1 = px.bar(taux_canal, x="taux d'erreur (%)", y="source_saisie", orientation="h",
+text="taux d'erreur (%)", title="Part de numéros invalides par canal de saisie")
+
+fig2 = px.bar(taux_pays, x="taux d'erreur (%)", y="pays_declare", orientation="h",
+text="taux d'erreur (%)", title="Part de numéros invalides par pays déclaré")
+
+st.plotly_chart(fig1)
+if not canal or "reprise_erp" in canal:
+    #selection = selection[selection["source_saisie"].isin(canal)]
+    st.caption("**NB :** Données **`reprise_erp`** récupéré de l'ancien logiciel de gestion de l'entreprise lors de son remplacement.")
+    st.caption("-> Des erreurs ont pu se se glisser dans les données lors du transfert.")
+    st.caption("-> De plus la gestion des erreurs était potentiellement différente sur l'ancien ERP.")
+st.plotly_chart(fig2)
+
 
 # =============================================================================
 # ÉTAPE 5 — Les numéros à traiter
