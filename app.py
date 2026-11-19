@@ -90,6 +90,19 @@ col4.metric("Non tranchés", non_tranches, f"{non_tranches / total:.1%} du total
 st.subheader("Combien de numéros ont pu être envoyés à VIES ?")
 # TODO ENTONNOIR (étape 2) : compter, étape par étape, les numéros qui restent après le retrait des absents,
 #          des doublons, puis des numéros mal formés, et les afficher avec px.funnel.
+absents = (selection["etape_rejet"] == "absent").sum()
+doublons = (selection["etape_rejet"] == "doublon").sum()
+structure = (selection["etape_rejet"] == "structure").sum()
+entonnoir = pd.DataFrame({
+"étape": ["Référentiel", "Sans les absents", "Sans les doublons", "Envoyés à VIES"],
+"numéros": [total,
+total - absents,
+total - absents - doublons,
+total - absents - doublons - structure],
+})
+fig = px.funnel(entonnoir, x="numéros", y="étape",
+title="Du référentiel aux numéros envoyés à VIES")
+st.plotly_chart(fig)
 
 # =============================================================================
 # ÉTAPE 4 — D'où viennent les erreurs ?
