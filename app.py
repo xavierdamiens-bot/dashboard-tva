@@ -196,7 +196,7 @@ with tab3:
     st.subheader("Temps de réponse VIES")
 
     fig = px.box(
-    selection, x="id", y="temps_reponse_ms", points="all", title="Distribution et Médiane du temps de réponse VIES",
+    selection, x="pays_declare", y="temps_reponse_ms", title="Distribution et Médiane du temps de réponse VIES",
     color_discrete_sequence=["#f0dd90"]
     )
 
