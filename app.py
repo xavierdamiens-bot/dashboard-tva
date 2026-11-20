@@ -77,7 +77,32 @@ selection = selection[selection["date_saisie"].dt.date.between(debut, fin)]
 # =============================================================================
 st.title("Qualité du référentiel TVA")
 # TODO AIDE (étape 6a) : une phrase d'aide pour la directrice financière (st.write).
+with st.expander("🛟 Aide"):
+    st.write("Ce site permet de ressortir les codes TVA dont il faut surveiller la *validité* ou réclamer une *mise à jour*. (L'action à entreprendre est spécifiée en colonne `Action`)")
+    st.write("Les **`Filtres`** (à gauche) permettent de trier les résultats en fonction des pays et des canaux de saisie des codes TVA")
+
 # TODO DATE_REGLE (étape 6b) : la date de la dernière vérification VIES et la règle pour les non tranchés (st.info).
+derniere = df["date_verification"].max()
+#st.info(f"Dernière vérification VIES : {derniere:%d/%m/%Y à %H:%M}. Règle : ...")
+
+st.markdown(
+    f"""
+    <div style="background-color: rgba(28, 131, 225, 0.1); border-left: 4px solid #1c83e1; padding: 16px; border-radius: 6px; color: #1c83e1;">
+        <strong>Dernière vérification VIES : {derniere:%d/%m/%Y à %H:%M}</strong>
+        <details style="margin-top: 10px; cursor: pointer;">
+            <summary><strong>ℹ️ Règle :</strong></summary>
+            <div style="margin-top: 8px; cursor: default;">
+                \n- **valide** : VIES a confirmé le numéro.
+                \n- **invalide** : VIES a refusé le numéro, ou le numéro a été écarté avant l'envoi parce qu'il était absent ou mal formé.
+                \n- **non_tranche** : VIES n'a pas pu répondre (service du pays indisponible, délai dépassé). Ce n'est ni valide ni invalide.
+                \n- Un **doublon** reprend le statut de la première ligne qui porte le même numéro.
+            </div>
+        </details>
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
+
 
 # =============================================================================
 # ÉTAPE 1 — Les quatre chiffres clés
